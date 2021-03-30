@@ -3,23 +3,12 @@ import React, { useState } from 'react';
 import styles from '../styles/Home.module.css'
 
 export default function Movies(){
-    const [procurado, setProcurado] = useState("Exterminador");
 
-    const {data, error} = useSWR(`http://www.omdbapi.com/?apikey=d72bbb8f&s=${procurado}`,fetcher)
-    if (error) {return(
-            <div>Falha na requisição...</div>
-        )
-        }
-    if (!data) {
-        return (
-            <div>
-                <center>
-                    Loading...
-                </center>
-            </div>
-        )
-    }
-    
+    const [procurado, setProcurado] = useState("Exterminador");
+    const [page, setPage] = useState(1)
+
+    const {data} = useSWR(`http://www.omdbapi.com/?apikey=d72bbb8f&s=${procurado}&page=${page}`,fetcher)
+
     function mostrar(data){
         if(data){
             if(data.Search){
@@ -35,38 +24,49 @@ export default function Movies(){
             }
         }
     }
+
+    function pageRight(){
+ 
+            if(page < 100){
+                return (
+                    <button onClick={() => setPage(page+1)}>Frente</button>
+                    )
+                }
+        }
+        function pageLeft(){
+ 
+            if(page > 1){
+                return (
+                    <button onClick={() => setPage(page-1)}>Volta</button>
+                    )
+                }
+        }
     return (
         <div>
-            <form>
                 <input
                     name="procurado"
-                    type="text"
+                    type="search"
                     placeholder = "Pesquise..."
                     onChange={(e) => setProcurado(e.target.value)}
                 />
-                
-            </form>
-       
-
-        
             <center>
+                <h1>Digite o nome do filme: {procurado}</h1>
+                {pageLeft()}
+                {pageRight()}
+                
                 <div className = {styles.container}>
-                    <h1>Filmes {procurado}</h1>
-                        {mostrar(data)}
+                    
+                    
+                    {mostrar(data)}
+                    
                 </div>
-  
-
              </center>
         </div>
     )
 }
 
 async function fetcher(url) {
-
     const res = await fetch(url)
-
     const json = await res.json()
-
     return json
-
 }
