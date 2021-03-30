@@ -120,3 +120,18 @@
     flex-direction: column;
   }
 }
+
+.atras{
+ color: #eaeaea;
+  background: #070707;
+}
+
+.buttonSubmit{
+  padding: 0.2rem;
+}
+
+.buttonSubmit button:hover{
+  background-color: #ce0202;
+  color:#f8f8f8;
+  border-radius: 12px;
+}

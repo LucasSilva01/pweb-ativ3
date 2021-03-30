@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 
 export default function Movies(){
 
-    const [procurado, setProcurado] = useState("Exterminador");
+    const [procurado, setProcurado] = useState("Superman");
     const [page, setPage] = useState(1)
 
     const {data} = useSWR(`http://www.omdbapi.com/?apikey=d72bbb8f&s=${procurado}&page=${page}`,fetcher)
@@ -14,14 +14,25 @@ export default function Movies(){
             if(data.Search){
                 return(
                     <div>
+                        
                 {data.Search.map(
                     (m) => <div className = {styles.card}>
-
+                        <center>
                     <br/>Título: {m.Title} <br/>Ano de lançamento:  {m.Year}<br/><img src={m.Poster}></img>
+                    </center>
                 </div>)}
+                
                 </div>
                 )
             }
+        }else{
+            return(
+                <div className = {styles.container}>
+                    <h1>
+                        Filme não encontrado, tente outro nome
+                    </h1>
+                </div>
+            )
         }
     }
 
@@ -29,7 +40,12 @@ export default function Movies(){
  
             if(page < 100){
                 return (
-                    <button onClick={() => setPage(page+1)}>Frente</button>
+                    <a className = {styles.buttonSubmit}>
+                        <button onClick={() => setPage(page+1)}>
+                            Frente
+                        </button>
+                    </a>
+                    
                     )
                 }
         }
@@ -37,23 +53,29 @@ export default function Movies(){
  
             if(page > 1){
                 return (
-                    <button onClick={() => setPage(page-1)}>Volta</button>
+                    <a className = {styles.buttonSubmit}>
+                        <button onClick={() => setPage(page-1)}>
+                            Volta
+                            </button>
+                    </a>
                     )
                 }
         }
     return (
-        <div>
+        <div className = {styles.atras}>
                 <input
+                    className = {styles.code}
                     name="procurado"
                     type="search"
                     placeholder = "Pesquise..."
                     onChange={(e) => setProcurado(e.target.value)}
                 />
             <center>
-                <h1>Digite o nome do filme: {procurado}</h1>
-                {pageLeft()}
-                {pageRight()}
-                
+                <h1>Filme: {procurado}</h1>
+              
+                    {pageLeft()}
+                    {pageRight()}
+               
                 <div className = {styles.container}>
                     
                     
